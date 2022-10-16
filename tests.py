@@ -50,6 +50,20 @@ def test_remove_dish_from_database_which_is_in_the_database(return_test_database
     assert database == {"Pomidorowa":["pomidory", "woda", "mieso"]}
     assert captured.out == "Deleting dish Kapusniak\n"
     
+def test_add_dish_which_is_already_in_the_database(return_test_database, monkeypatch, capsys):
+    """Test the add dish function with dish which is already in the database"""
+    
+    monkeypatch.setattr('builtins.input', lambda _: "Kapusniak")
+    api.add_dish()
+    captured = capsys.readouterr()
+    assert captured.out == "Dish Kapusniak already exists!\n"
+
+
+@pytest.mark.skip    
+def test_add_dish_which_is_not_yet_in_the_database(return_test_database, monkeypatch, capsys):
+    """Test the add dish function with dish not yet in the database""" 
+
+
 @pytest.fixture
 def return_test_database(monkeypatch):
     """Fixture for returning test database"""

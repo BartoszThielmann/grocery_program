@@ -63,3 +63,84 @@ def show_all():
         print(f"{key} ")
     if len(database.keys()) == 0:
         print('The database is currently empty.')
+        
+def edit_dish():
+    """Edit dish in database"""
+    database = open_database()
+    usr_inp = input("Which dish would you like to edit? ")
+    if usr_inp in database.keys():
+        print(f"Editing dish {usr_inp}")
+        # print ingredients of the chosen dish
+        if len(database[usr_inp])>0:
+            print("Current ingredients are: ")
+            for index,item in enumerate(database[usr_inp]):
+                print("index " + str(index) + ": " + str(item))
+        else:
+            print("There are no ingredients saved for this dish!")
+            exit()
+        
+        ing_id = input("Which index do you want to change? ")
+        ing_ch = input("What do you want to insert? ")
+        try:
+            database[usr_inp][int(ing_id)] = ing_ch
+        except (IndexError, ValueError):
+            print("Incorrect index!")
+        else:
+            with open('database.json', 'w') as f:
+                    json.dump(database, f)
+            print("Done!")
+    else:
+        print(f"Dish {usr_inp} doesn't exist in the database")
+        
+def add_ingr():
+    """Add ingredients to an existing dish"""
+    database = open_database()
+    usr_inp = input("Which dish would you like to edit? ")
+    if usr_inp in database.keys():
+        if len(database[usr_inp])>0:
+            print("Current ingredients are: ")
+            for item in database[usr_inp]:
+                print(item)
+        else:
+            print("There are no ingredients saved for this dish!")
+        
+        while True:
+            usr_add = input("Add ingredient or (q)uit: ")
+            if usr_add == 'q':
+                with open('database.json', 'w') as f:
+                    json.dump(database, f)
+                print("Done!")
+                break
+            else: 
+                database[usr_inp].append(usr_add)
+                
+    
+    else:
+        print(f"Dish {usr_inp} doesn't exist in the database")
+    
+def rm_ingr():
+    """Remove ingredients specified by user"""
+    database = open_database()
+    usr_inp = input("Which dish would you like to edit? ")
+    if usr_inp in database.keys():
+        if len(database[usr_inp])>0:
+            print("Current ingredients are: ")
+            for index, item in enumerate(database[usr_inp]):
+                print("index " + str(index) + ": " + str(item))
+        else:
+            print("There are no ingredients saved for this dish!")
+
+        while True:
+            usr_rm = input("Remove ingredient or (q)uit: ")
+            if usr_rm == 'q':
+                with open('database.json', 'w') as f:
+                    json.dump(database, f)
+                print("Done!")
+                break
+            else:
+                try:
+                    database[usr_inp].remove(usr_rm)
+                except ValueError:
+                    # TODO : improve it later
+                    print("Wrong input")
+
